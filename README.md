@@ -1,23 +1,23 @@
-# 📚 Law Study Assistant
+# 📚 Law Study Assistant API
 
-A Django-powered **full web application** designed to make studying law easier.  
-This project provides tools for organizing books and cases, with user authentication and a simple web interface.
+A Django REST Framework **API** designed to make studying law easier.  
+This project provides RESTful endpoints for organizing books and cases, with token-based authentication.
 
 ---
 
 ## 🚀 Features
-- User registration, login, and profile management  
-- Manage law books and cases  
-- Search and browse content  
-- Admin panel for managing data  
+- Token-based authentication (register, login)  
+- RESTful API for law books and cases  
+- User notes and quiz system  
+- API documentation with Swagger UI  
 
 ---
 
 ## 🛠 Tech Stack
-- **Backend**: Django (Python)  
-- **Frontend**: Django Templates (HTML, CSS, JS)  
+- **Backend**: Django REST Framework (Python)  
+- **API Documentation**: drf-spectacular (Swagger)  
 - **Database**: SQLite (default) → PostgreSQL (production ready)  
-- **Authentication**: Django Auth System  
+- **Authentication**: Token Authentication  
 
 ---
 
