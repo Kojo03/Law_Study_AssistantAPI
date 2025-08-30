@@ -1,11 +1,14 @@
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 from .models import Subject, Topic, Note, Quiz, QuizAttempt
 from .serializers import (
     SubjectSerializer, TopicSerializer,
     NoteSerializer, QuizSerializer, QuizAttemptSerializer
 )
-from accounts.permissions import IsLecturerOrAdmin
+from accounts.permissions import IsAdminOrReadOnly
+import os
 
 # ----- SUBJECTS -----
 class SubjectListCreateView(generics.ListCreateAPIView):
@@ -14,7 +17,7 @@ class SubjectListCreateView(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "POST":
-            return [IsLecturerOrAdmin()]
+            return [IsAdminOrReadOnly()]
         return [permissions.AllowAny()]
 
 
@@ -33,11 +36,18 @@ class TopicListCreateView(generics.ListCreateAPIView):
 
     def get_permissions(self):
         if self.request.method == "POST":
-            return [IsLecturerOrAdmin()]
+            return [IsAdminOrReadOnly()]
         return [permissions.AllowAny()]
 
     def perform_create(self, serializer):
         subject_id = self.kwargs["pk"]
+        # Validate subject_id to prevent path traversal
+        try:
+            subject_id = int(subject_id)
+            if subject_id <= 0:
+                raise ValidationError("Invalid subject ID")
+        except (ValueError, TypeError):
+            raise ValidationError("Invalid subject ID format")
         serializer.save(subject_id=subject_id)
 
 
@@ -70,6 +80,13 @@ class NoteCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         topic_id = self.kwargs["pk"]
+        # Validate topic_id to prevent path traversal
+        try:
+            topic_id = int(topic_id)
+            if topic_id <= 0:
+                raise ValidationError("Invalid topic ID")
+        except (ValueError, TypeError):
+            raise ValidationError("Invalid topic ID format")
         serializer.save(user=self.request.user, topic_id=topic_id)
 
 

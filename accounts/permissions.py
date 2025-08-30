@@ -1,15 +1,18 @@
 from rest_framework import permissions
 
-class IsLecturerOrAdmin(permissions.BasePermission):
-    """
-    Custom permission to only allow lecturers or admins to access a view.
-    """
+class IsAdminUser(permissions.BasePermission):
+    """Admin users can manage books and users"""
     def has_permission(self, request, view):
-        return request.user and (request.user.role == 'lecturer' or request.user.role == 'admin')
+        return request.user.is_authenticated and request.user.is_admin
 
-class IsAdmin(permissions.BasePermission):
-    """
-    Custom permission to only allow admins to access a view.
-    """
+class IsAdminOrReadOnly(permissions.BasePermission):
+    """Admin can modify, others can only read"""
     def has_permission(self, request, view):
-        return request.user and request.user.role == 'admin'
+        if request.method in permissions.READONLY_METHODS:
+            return True
+        return request.user.is_authenticated and request.user.is_admin
+
+class IsLecturerOrAdmin(permissions.BasePermission):
+    """Lecturers and admins can manage content"""
+    def has_permission(self, request, view):
+        return request.user.is_authenticated and request.user.is_admin

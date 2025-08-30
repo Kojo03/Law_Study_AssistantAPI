@@ -16,14 +16,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.shortcuts import redirect
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
+def root_redirect(request):
+    return redirect('/api/docs/')
+
 urlpatterns = [
+    path("", root_redirect, name="root"),
     path("admin/", admin.site.urls),
     path("auth/", include("accounts.urls")),   # register, login
     path("users/", include("accounts.user_urls")),  # profile
-    path("books/", include("books.urls")),     # subjects, topics, notes, quizzes
-    path("cases/", include("cases.urls")),     # law cases
+    path("library/", include("library.urls")),  # library management
+    path("books/", include("books.urls")),  # law books management
+    path("cases/", include("cases.urls")),  # law cases management
     # API Schema and Documentation
     path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
