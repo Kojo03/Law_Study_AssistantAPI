@@ -17,7 +17,8 @@ class Topic(models.Model):
     description = models.TextField(blank=True, null=True)
 
     def __str__(self):
-        return f"{self.subject.title} - {self.title}"
+        from django.utils.html import escape
+        return escape(f"{self.subject.title} - {self.title}")
 
 
 class Note(models.Model):

@@ -34,7 +34,7 @@ class CasesAPITest(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(
             username='testuser',
-            password='testpass123'
+            password='secure_test_password_2024'
         )
         self.token = Token.objects.create(user=self.user)
         

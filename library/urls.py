@@ -22,9 +22,9 @@ urlpatterns = [
     path('overdue/', views.overdue_books, name='overdue-books'),
     
     # Transactions
-    path('my-transactions/', views.user_transactions, name='user-transactions'),
+    path('transactions/', views.user_transactions, name='user-transactions'),
     
     # Admin endpoints
     path('admin/overdue/', views.all_overdue_books, name='admin-overdue'),
-    path('admin/send-notifications/', views.send_overdue_notifications, name='send-notifications'),
+    path('admin/notifications/', views.send_overdue_notifications, name='send-notifications'),
 ]

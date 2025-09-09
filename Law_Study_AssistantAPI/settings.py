@@ -35,6 +35,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
+# Enable automatic slash appending for consistent URLs
+APPEND_SLASH = True
+
 
 # Application definition
 
@@ -186,6 +189,23 @@ SPECTACULAR_SETTINGS = {
     'DESCRIPTION': 'Comprehensive API for law library management system',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
+    'ENUM_NAME_OVERRIDES': {
+        'RoleBa7Enum': 'accounts.User.role'
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SECURITY': [{
+        'tokenAuth': []
+    }],
+    'COMPONENTS': {
+        'securitySchemes': {
+            'tokenAuth': {
+                'type': 'apiKey',
+                'in': 'header',
+                'name': 'Authorization',
+                'description': 'Token-based authentication with required prefix "Token"'
+            }
+        }
+    }
 }
 
 CORS_ALLOWED_ORIGINS = [

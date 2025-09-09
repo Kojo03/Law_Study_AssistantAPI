@@ -25,10 +25,10 @@ class Book(models.Model):
     publisher = models.CharField(max_length=255, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     total_copies = models.PositiveIntegerField(validators=[MinValueValidator(1)])
-    available_copies = models.PositiveIntegerField(validators=[MinValueValidator(0)])
+    available_copies = models.PositiveIntegerField(validators=[MinValueValidator(0)], default=0)
     description = models.TextField(blank=True)
     location = models.CharField(max_length=100, blank=True, help_text="Shelf location")
-    added_date = models.DateTimeField(auto_now_add=True)
+    added_date = models.DateTimeField(default=timezone.now)
     
     def save(self, *args, **kwargs):
         if not self.pk:  # New book
@@ -86,7 +86,8 @@ class BookCheckout(models.Model):
         return self.fine_amount
     
     def __str__(self):
-        return f"{self.user.username} - {self.book.title}"
+        from django.utils.html import escape
+        return escape(f"{self.user.username} - {self.book.title}")
 
 class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
